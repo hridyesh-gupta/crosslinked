@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* ── Crosslinked · "Signal" design system ─────────────────────────────
+   Premium dark, minimal. Near-black canvas, single electric-lime accent
+   used sparingly. Space Grotesk display + Inter body. */
+@theme inline {
+  --color-canvas: #0b0d10;
+  --color-surface: #14171c;
+  --color-surface-2: #1b1f25;
+  --color-border: #23282f;
+  --color-border-strong: #2d323a;
+  --color-fg: #ecedf0;
+  --color-muted: #9aa1ab;
+  --color-faint: #6c7178;
+
+  --color-accent: #c5fe3c;
+  --color-accent-strong: #b2ef1f;
+  --color-accent-ink: #14210a;
+
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+/* Thin, premium scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+}
+
+/* ── Helpers ─────────────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-gradient {
+  background: linear-gradient(170deg, #d8ff6e 0%, #aef01a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Soft lime glow behind hero / focal elements */
+.hero-glow::before {
+  content: "";
+  position: absolute;
+  inset: -10% 0 auto 0;
+  height: 540px;
+  background: radial-gradient(
+    50% 60% at 50% 0%,
+    rgba(197, 254, 60, 0.12),
+    rgba(197, 254, 60, 0.03) 45%,
+    transparent 72%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Faint hairline grid texture for section backdrops */
+.grid-faint {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Subtle top-light gradient on cards */
+.card-sheen {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 40%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
