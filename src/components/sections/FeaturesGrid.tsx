@@ -2,18 +2,15 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/Reveal";
 import { Icon } from "@/components/Icon";
-import { features } from "@/content/home";
+import { resolveFeatures } from "@/content/resolve";
+import type { Dictionary } from "@/i18n/dictionary";
 
-export function FeaturesGrid() {
+export function FeaturesGrid({ dict }: { dict: Dictionary }) {
+  const features = resolveFeatures(dict);
   return (
     <section className="py-20 sm:py-24">
       <Container className="flex flex-col gap-12">
-        <SectionHeading
-          eyebrow="Why us"
-          title="Built for performance"
-          accent="performance"
-          subtitle="Enterprise-grade features that deliver measurable results."
-        />
+        <SectionHeading heading={dict.features} />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f, i) => (
             <Reveal key={f.title} delay={(i % 3) * 0.07}>

@@ -1,15 +1,14 @@
 import { Container } from "@/components/ui/Container";
-import { clients } from "@/content/results";
+import { clients } from "@/content/structure";
+import type { Dictionary } from "@/i18n/dictionary";
 
 /** Muted client monogram row for social proof. */
-export function TrustStrip() {
+export function TrustStrip({ dict }: { dict: Dictionary }) {
   const featured = clients.slice(0, 8);
   return (
     <section className="py-12">
       <Container className="flex flex-col items-center gap-7">
-        <p className="text-center text-sm text-faint">
-          Trusted by 30+ teams across restaurants, education, and professional services
-        </p>
+        <p className="text-center text-sm text-faint">{dict.trust.line}</p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           {featured.map((c) => (
             <span

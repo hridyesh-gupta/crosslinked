@@ -2,22 +2,25 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/Reveal";
 import { ServiceCategoryCard } from "@/components/ServiceCategoryCard";
-import { serviceCategories } from "@/content/services";
+import { resolveCategories } from "@/content/resolve";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionary";
 
-export function ServicesPreview() {
+export function ServicesPreview({ dict, locale }: { dict: Dictionary; locale: Locale }) {
+  const categories = resolveCategories(dict);
   return (
     <section className="py-20 sm:py-24">
       <Container className="flex flex-col gap-12">
-        <SectionHeading
-          eyebrow="What we do"
-          title="Everything we build"
-          accent="build"
-          subtitle="Three connected disciplines — automation that runs your operations, products that put you online, and design that makes you unmistakable."
-        />
+        <SectionHeading heading={dict.servicesPreview} />
         <div className="grid gap-5 md:grid-cols-3">
-          {serviceCategories.map((c, i) => (
+          {categories.map((c, i) => (
             <Reveal key={c.id} delay={i * 0.08}>
-              <ServiceCategoryCard category={c} className="h-full" />
+              <ServiceCategoryCard
+                category={c}
+                locale={locale}
+                servicesSuffix={dict.servicesPreview.servicesSuffix}
+                className="h-full"
+              />
             </Reveal>
           ))}
         </div>

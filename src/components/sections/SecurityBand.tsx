@@ -1,9 +1,10 @@
 import { ShieldCheck, Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
-import { security } from "@/content/home";
+import type { Dictionary } from "@/i18n/dictionary";
 
-export function SecurityBand() {
+export function SecurityBand({ dict }: { dict: Dictionary }) {
+  const security = dict.security;
   return (
     <section className="py-10">
       <Container>

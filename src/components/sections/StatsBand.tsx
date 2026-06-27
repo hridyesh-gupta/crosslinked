@@ -1,9 +1,11 @@
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { cn } from "@/lib/cn";
-import { stats } from "@/content/home";
+import { resolveStats } from "@/content/resolve";
+import type { Dictionary } from "@/i18n/dictionary";
 
-export function StatsBand() {
+export function StatsBand({ dict }: { dict: Dictionary }) {
+  const stats = resolveStats(dict);
   return (
     <section className="border-y border-border bg-surface/20">
       <Container className="py-12 sm:py-14">

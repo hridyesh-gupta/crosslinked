@@ -3,20 +3,18 @@ import { Quote, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/Reveal";
-import { testimonials } from "@/content/results";
+import { resolveTestimonials } from "@/content/resolve";
+import { withLocale, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionary";
 
-export function FeaturedTestimonial() {
-  const featured = testimonials.find((t) => t.org === "CERN") ?? testimonials[0];
+export function FeaturedTestimonial({ dict, locale }: { dict: Dictionary; locale: Locale }) {
+  const all = resolveTestimonials(dict);
+  const featured = all.find((t) => t.id === "cern") ?? all[0];
 
   return (
     <section className="py-20 sm:py-24">
       <Container className="flex flex-col gap-12">
-        <SectionHeading
-          eyebrow="Results"
-          title="Results for industry leaders"
-          accent="industry leaders"
-          subtitle="Delivering solutions that close more clients and grow recurring revenue."
-        />
+        <SectionHeading heading={dict.resultsTeaser} />
 
         <Reveal>
           <figure className="card-sheen relative mx-auto max-w-3xl rounded-2xl border border-border bg-surface/50 p-8 sm:p-10">
@@ -38,10 +36,10 @@ export function FeaturedTestimonial() {
 
         <div className="flex justify-center">
           <Link
-            href="/results"
+            href={withLocale(locale, "/results")}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-accent"
           >
-            Read more client stories
+            {dict.resultsTeaser.readMore}
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>

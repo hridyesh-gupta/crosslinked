@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/PageHeader";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -6,26 +7,31 @@ import { Icon } from "@/components/Icon";
 import { Reveal } from "@/components/Reveal";
 import { ServiceItemCard } from "@/components/ServiceItemCard";
 import { ContactCta } from "@/components/sections/ContactCta";
-import { serviceCategories } from "@/content/services";
+import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionary";
+import { resolveCategories } from "@/content/resolve";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "AI automation, website & app development, and design & branding — the full Crosslinked service catalogue.",
-};
+type Params = { params: Promise<{ locale: string }> };
 
-export default function ServicesPage() {
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const dict = getDictionary(locale);
+  return { title: dict.meta.servicesTitle, description: dict.meta.servicesDescription };
+}
+
+export default async function ServicesPage({ params }: Params) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
+  const categories = resolveCategories(dict);
+
   return (
     <>
-      <PageHeader
-        eyebrow="Services"
-        title="Everything we build"
-        accent="build"
-        subtitle="Automation, web & app, and design — scoped to your stack and your ROI, not a fixed retainer."
-      />
+      <PageHeader heading={dict.servicesPage.header} />
 
       <div className="flex flex-col gap-20 py-20 sm:gap-24 sm:py-24">
-        {serviceCategories.map((category) => (
+        {categories.map((category) => (
           <section key={category.id} id={category.id} className="scroll-mt-24">
             <Container className="flex flex-col gap-10">
               <div className="flex flex-col gap-4">
@@ -47,7 +53,7 @@ export default function ServicesPage() {
 
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {category.services.map((service, i) => (
-                  <Reveal key={service.title} delay={(i % 3) * 0.06}>
+                  <Reveal key={service.id} delay={(i % 3) * 0.06}>
                     <ServiceItemCard service={service} />
                   </Reveal>
                 ))}
@@ -57,7 +63,7 @@ export default function ServicesPage() {
         ))}
       </div>
 
-      <ContactCta />
+      <ContactCta dict={dict} />
     </>
   );
 }

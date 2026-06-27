@@ -1,40 +1,48 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Clock, ArrowUpRight, Phone, Mail, MessageCircle, Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { PageHeader } from "@/components/PageHeader";
 import { ContactForm } from "@/components/ContactForm";
-import { booking } from "@/content/home";
-import { site, whatsappHref } from "@/content/site";
+import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionary";
+import { site } from "@/content/structure";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Book a free discovery call or a strategy deep-dive. ROI-based scoping, fast deployment, and direct access to your engineer.",
-};
+type Params = { params: Promise<{ locale: string }> };
 
-const tiers = [
-  { ...booking.discovery, href: site.contact.calendly, highlight: false, price: "Free" },
-  { ...booking.deepDive, href: site.contact.calendly, highlight: true, price: site.contact.deepDivePrice },
-];
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const dict = getDictionary(locale);
+  return { title: dict.meta.contactTitle, description: dict.meta.contactDescription };
+}
 
-const direct = [
-  { label: site.contact.phoneDisplay, href: `tel:${site.contact.phone}`, icon: Phone },
-  { label: site.contact.email, href: `mailto:${site.contact.email}`, icon: Mail },
-  { label: "Chat on WhatsApp", href: whatsappHref, icon: MessageCircle },
-];
+export default async function ContactPage({ params }: Params) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
+  const cp = dict.contactPage;
 
-export default function ContactPage() {
+  const waHref = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(
+    dict.whatsappPrefill,
+  )}`;
+
+  const tiers = [
+    { ...cp.discovery, href: site.contact.calendly, highlight: false, price: cp.discovery.price },
+    { ...cp.deepDive, href: site.contact.calendly, highlight: true, price: site.contact.deepDivePrice },
+  ];
+
+  const direct = [
+    { label: site.contact.phoneDisplay, href: `tel:${site.contact.phone}`, icon: Phone },
+    { label: site.contact.email, href: `mailto:${site.contact.email}`, icon: Mail },
+    { label: cp.chatLabel, href: waHref, icon: MessageCircle },
+  ];
+
   return (
     <>
-      <PageHeader
-        eyebrow="Contact"
-        title="Let’s get started"
-        accent="get started"
-        subtitle="Book a free discovery call or a strategy deep-dive. ROI-based scoping, fast deployment, and direct access to your engineer."
-      />
+      <PageHeader heading={cp.header} />
 
       <Container className="grid gap-12 py-20 sm:py-24 lg:grid-cols-2">
-        {/* Left: booking + expectations + direct */}
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-4">
             {tiers.map((t) => (
@@ -67,9 +75,9 @@ export default function ContactPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <h3 className="font-display text-sm font-semibold text-fg">What to expect</h3>
+            <h3 className="font-display text-sm font-semibold text-fg">{cp.expectationsTitle}</h3>
             <ul className="flex flex-col gap-2.5">
-              {booking.expectations.map((e) => (
+              {cp.expectations.map((e) => (
                 <li key={e} className="inline-flex items-start gap-2.5 text-sm text-muted">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" strokeWidth={2.4} aria-hidden="true" />
                   {e}
@@ -79,7 +87,7 @@ export default function ContactPage() {
           </div>
 
           <div className="flex flex-col gap-3 border-t border-border pt-6">
-            <h3 className="font-display text-sm font-semibold text-fg">Direct contact</h3>
+            <h3 className="font-display text-sm font-semibold text-fg">{cp.directTitle}</h3>
             <div className="flex flex-col gap-2.5">
               {direct.map((d) => (
                 <a
@@ -97,9 +105,8 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* Right: form */}
         <div>
-          <ContactForm />
+          <ContactForm form={cp.form} email={site.contact.email} />
         </div>
       </Container>
     </>

@@ -1,51 +1,35 @@
 import { cn } from "@/lib/cn";
 import { Eyebrow } from "./Eyebrow";
-
-interface SectionHeadingProps {
-  eyebrow?: string;
-  title: string;
-  /** Substring of `title` rendered in the accent gradient. */
-  accent?: string;
-  subtitle?: string;
-  align?: "left" | "center";
-  className?: string;
-}
+import type { Heading } from "@/i18n/dictionary";
 
 export function SectionHeading({
-  eyebrow,
-  title,
-  accent,
-  subtitle,
+  heading,
   align = "center",
   className,
-}: SectionHeadingProps) {
-  const parts =
-    accent && title.includes(accent)
-      ? [
-          title.slice(0, title.indexOf(accent)),
-          accent,
-          title.slice(title.indexOf(accent) + accent.length),
-        ]
-      : [title, "", ""];
-
+}: {
+  heading: Heading;
+  align?: "left" | "center";
+  className?: string;
+}) {
+  const { eyebrow, pre, accent, post, subtitle } = heading;
   return (
     <div
       className={cn(
         "flex flex-col gap-4",
-        align === "center" ? "items-center text-center mx-auto max-w-2xl" : "items-start text-left max-w-2xl",
+        align === "center"
+          ? "mx-auto max-w-2xl items-center text-center"
+          : "max-w-2xl items-start text-left",
         className,
       )}
     >
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
       <h2 className="font-display text-balance text-3xl font-bold leading-[1.1] tracking-tight text-fg sm:text-4xl md:text-[2.75rem]">
-        {parts[0]}
-        <span className="text-gradient">{parts[1]}</span>
-        {parts[2]}
+        {pre}
+        <span className="text-gradient">{accent}</span>
+        {post}
       </h2>
       {subtitle && (
-        <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
-          {subtitle}
-        </p>
+        <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">{subtitle}</p>
       )}
     </div>
   );

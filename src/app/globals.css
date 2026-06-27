@@ -1,21 +1,27 @@
 @import "tailwindcss";
 
-/* ── Crosslinked · "Signal" design system ─────────────────────────────
-   Premium dark, minimal. Near-black canvas, single electric-lime accent
-   used sparingly. Space Grotesk display + Inter body. */
-@theme inline {
-  --color-canvas: #0b0d10;
-  --color-surface: #14171c;
-  --color-surface-2: #1b1f25;
-  --color-border: #23282f;
-  --color-border-strong: #2d323a;
-  --color-fg: #ecedf0;
-  --color-muted: #9aa1ab;
-  --color-faint: #6c7178;
+/* Drive `dark:` utilities from a `.dark` class on <html> (toggled by the
+   theme switcher), not the OS preference. */
+@custom-variant dark (&:where(.dark, .dark *));
 
-  --color-accent: #c5fe3c;
-  --color-accent-strong: #b2ef1f;
-  --color-accent-ink: #14210a;
+/* ── Crosslinked · "Signal" design system ─────────────────────────────
+   Premium, minimal. Electric-lime accent used sparingly. Space Grotesk
+   display + Inter body. Tokens are theme-aware: dark is the signature
+   look, light is a clean alternative. The accent deepens on light so it
+   stays legible, and brightens on dark. */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-ink: var(--accent-ink);
 
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -25,7 +31,54 @@
   --radius-2xl: 1.25rem;
 }
 
+/* Light (default) */
 :root {
+  --canvas: #f8f9f6;
+  --surface: #ffffff;
+  --surface-2: #f1f3ee;
+  --border: #e4e7e0;
+  --border-strong: #d4d8cd;
+  --fg: #0c0e12;
+  --muted: #51565e;
+  --faint: #7e848d;
+
+  --accent: #5e9e00;
+  --accent-strong: #4d7c0f;
+  --accent-ink: #ffffff;
+
+  --glow: 197, 254, 60;
+  --grid-line: 0, 0, 0, 0.04;
+  --sheen: 0, 0, 0, 0.015;
+  --grad-from: #5e9e00;
+  --grad-to: #3f6212;
+}
+
+/* Dark (signature) */
+.dark {
+  --canvas: #0b0d10;
+  --surface: #14171c;
+  --surface-2: #1b1f25;
+  --border: #23282f;
+  --border-strong: #2d323a;
+  --fg: #ecedf0;
+  --muted: #9aa1ab;
+  --faint: #6c7178;
+
+  --accent: #c5fe3c;
+  --accent-strong: #b2ef1f;
+  --accent-ink: #14210a;
+
+  --glow: 197, 254, 60;
+  --grid-line: 255, 255, 255, 0.025;
+  --sheen: 255, 255, 255, 0.025;
+  --grad-from: #d8ff6e;
+  --grad-to: #aef01a;
+}
+
+:root {
+  color-scheme: light;
+}
+.dark {
   color-scheme: dark;
 }
 
@@ -46,7 +99,6 @@ body {
   color: var(--color-accent-ink);
 }
 
-/* Thin, premium scrollbar */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border-strong) transparent;
@@ -58,13 +110,12 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(170deg, #d8ff6e 0%, #aef01a 100%);
+  background: linear-gradient(170deg, var(--grad-from) 0%, var(--grad-to) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Soft lime glow behind hero / focal elements */
 .hero-glow::before {
   content: "";
   position: absolute;
@@ -72,25 +123,23 @@ body {
   height: 540px;
   background: radial-gradient(
     50% 60% at 50% 0%,
-    rgba(197, 254, 60, 0.12),
-    rgba(197, 254, 60, 0.03) 45%,
+    rgba(var(--glow), 0.1),
+    rgba(var(--glow), 0.03) 45%,
     transparent 72%
   );
   pointer-events: none;
   z-index: 0;
 }
 
-/* Faint hairline grid texture for section backdrops */
 .grid-faint {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(to right, rgba(var(--grid-line)) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(var(--grid-line)) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
-/* Subtle top-light gradient on cards */
 .card-sheen {
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 40%);
+  background-image: linear-gradient(180deg, rgba(var(--sheen)), transparent 40%);
 }
 
 @media (prefers-reduced-motion: reduce) {

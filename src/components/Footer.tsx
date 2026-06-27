@@ -2,58 +2,58 @@ import Link from "next/link";
 import { Phone, Mail, MessageCircle } from "lucide-react";
 import { Container } from "./ui/Container";
 import { Wordmark } from "./Wordmark";
-import { site, navItems, whatsappHref } from "@/content/site";
-import { serviceCategories } from "@/content/services";
+import { site, navHrefs, serviceStructure } from "@/content/structure";
+import { withLocale, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionary";
 
-export function Footer() {
+export function Footer({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const year = new Date().getFullYear();
+  const waHref = `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(
+    dict.whatsappPrefill,
+  )}`;
 
   return (
     <footer className="mt-24 border-t border-border bg-surface/30">
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="flex flex-col gap-4">
-            <Wordmark />
-            <p className="max-w-xs text-sm leading-relaxed text-muted">
-              {site.tagline} AI automation, web & app development, and design for
-              modern businesses.
-            </p>
+            <Wordmark locale={locale} />
+            <p className="max-w-xs text-sm leading-relaxed text-muted">{dict.footer.tagline}</p>
           </div>
 
-          <FooterCol title="Services">
-            {serviceCategories.map((c) => (
-              <FooterLink key={c.id} href={`/services#${c.id}`}>
-                {c.label}
+          <FooterCol title={dict.footer.services}>
+            {serviceStructure.map((c) => (
+              <FooterLink key={c.id} href={withLocale(locale, `/services#${c.id}`)}>
+                {dict.servicesPage.categories[c.id].label}
               </FooterLink>
             ))}
           </FooterCol>
 
-          <FooterCol title="Company">
-            {navItems.map((n) => (
-              <FooterLink key={n.href} href={n.href}>
-                {n.label}
+          <FooterCol title={dict.footer.company}>
+            {navHrefs.map((n) => (
+              <FooterLink key={n.href} href={withLocale(locale, n.href)}>
+                {dict.nav[n.key]}
               </FooterLink>
             ))}
           </FooterCol>
 
-          <FooterCol title="Contact">
+          <FooterCol title={dict.footer.contact}>
             <FooterLink href={`tel:${site.contact.phone}`} external icon={<Phone className="h-3.5 w-3.5" />}>
               {site.contact.phoneDisplay}
             </FooterLink>
             <FooterLink href={`mailto:${site.contact.email}`} external icon={<Mail className="h-3.5 w-3.5" />}>
               {site.contact.email}
             </FooterLink>
-            <FooterLink href={whatsappHref} external icon={<MessageCircle className="h-3.5 w-3.5" />}>
-              WhatsApp
+            <FooterLink href={waHref} external icon={<MessageCircle className="h-3.5 w-3.5" />}>
+              {dict.footer.whatsapp}
             </FooterLink>
           </FooterCol>
         </div>
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-faint sm:flex-row sm:items-center">
           <p>
-            © {year} {site.name}. All rights reserved.
+            © {year} {site.name}. {dict.footer.rights}
           </p>
-          <p>{site.tagline}</p>
         </div>
       </Container>
     </footer>

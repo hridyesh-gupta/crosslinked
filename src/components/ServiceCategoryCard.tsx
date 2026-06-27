@@ -2,18 +2,23 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Icon } from "./Icon";
 import { cn } from "@/lib/cn";
-import type { ServiceCategory } from "@/content/services";
+import { withLocale, type Locale } from "@/i18n/config";
+import type { ResolvedCategory } from "@/content/resolve";
 
 export function ServiceCategoryCard({
   category,
+  locale,
+  servicesSuffix,
   className,
 }: {
-  category: ServiceCategory;
+  category: ResolvedCategory;
+  locale: Locale;
+  servicesSuffix: string;
   className?: string;
 }) {
   return (
     <Link
-      href={`/services#${category.id}`}
+      href={withLocale(locale, `/services#${category.id}`)}
       className={cn(
         "card-sheen group relative flex flex-col gap-4 rounded-2xl border border-border bg-surface/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:bg-surface",
         className,
@@ -30,7 +35,7 @@ export function ServiceCategoryCard({
 
       <div className="mt-auto pt-2">
         <span className="inline-flex items-center gap-1.5 text-sm font-medium text-fg transition-colors group-hover:text-accent">
-          {category.services.length} services
+          {category.services.length} {servicesSuffix}
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </span>
       </div>

@@ -5,11 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { navItems } from "@/content/site";
+import { navHrefs } from "@/content/structure";
+import { withLocale, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/dictionary";
 import { Wordmark } from "./Wordmark";
 import { Button } from "./ui/Button";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
-export function Nav() {
+export function Nav({ dict, locale }: { dict: Dictionary; locale: Locale }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -25,6 +29,11 @@ export function Nav() {
     setOpen(false);
   }, [pathname]);
 
+  const items = navHrefs.map((n) => ({
+    label: dict.nav[n.key],
+    href: withLocale(locale, n.href),
+  }));
+
   return (
     <header
       className={cn(
@@ -35,10 +44,10 @@ export function Nav() {
       )}
     >
       <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
-        <Wordmark />
+        <Wordmark locale={locale} />
 
         <div className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) => {
+          {items.map((item) => {
             const active = pathname === item.href;
             return (
               <Link
@@ -55,16 +64,18 @@ export function Nav() {
           })}
         </div>
 
-        <div className="hidden md:block">
-          <Button href="/contact" size="md">
-            Book a call
+        <div className="hidden items-center gap-2 md:flex">
+          <LanguageSwitcher locale={locale} label={dict.nav.language} />
+          <ThemeToggle label={dict.nav.theme} />
+          <Button href={withLocale(locale, "/contact")}>
+            {dict.nav.bookCall}
             <ArrowUpRight className="h-4 w-4" />
           </Button>
         </div>
 
         <button
           type="button"
-          aria-label={open ? "Close menu" : "Open menu"}
+          aria-label={dict.nav.menu}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
           className="grid h-10 w-10 place-items-center rounded-lg border border-border bg-surface text-fg md:hidden"
@@ -76,7 +87,7 @@ export function Nav() {
       {open && (
         <div className="border-t border-border bg-canvas/95 backdrop-blur-xl md:hidden">
           <div className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-5 py-4 sm:px-6">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -90,10 +101,14 @@ export function Nav() {
                 {item.label}
               </Link>
             ))}
-            <Button href="/contact" className="mt-2 w-full">
-              Book a call
-              <ArrowUpRight className="h-4 w-4" />
-            </Button>
+            <div className="mt-3 flex items-center gap-2">
+              <LanguageSwitcher locale={locale} label={dict.nav.language} />
+              <ThemeToggle label={dict.nav.theme} />
+              <Button href={withLocale(locale, "/contact")} className="ml-auto">
+                {dict.nav.bookCall}
+                <ArrowUpRight className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       )}
