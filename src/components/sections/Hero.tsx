@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Button } from "@/components/ui/Button";
 import { AutomationDiagram } from "./AutomationDiagram";
+import { SignalField } from "@/components/SignalField";
 import { withLocale, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionary";
 
@@ -11,7 +12,8 @@ export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
 
   return (
     <section className="hero-glow relative overflow-hidden">
-      <div aria-hidden className="grid-faint pointer-events-none absolute inset-0 opacity-40" />
+      <div aria-hidden className="grid-faint pointer-events-none absolute inset-0 opacity-25" />
+      <SignalField />
       <Container className="relative grid items-center gap-14 py-20 sm:py-24 lg:grid-cols-[1.1fr_0.9fr] lg:py-32">
         <div className="flex flex-col items-start gap-6">
           <Eyebrow>{h.eyebrow}</Eyebrow>

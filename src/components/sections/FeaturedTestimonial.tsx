@@ -17,7 +17,7 @@ export function FeaturedTestimonial({ dict, locale }: { dict: Dictionary; locale
         <SectionHeading heading={dict.resultsTeaser} />
 
         <Reveal>
-          <figure className="card-sheen relative mx-auto max-w-3xl rounded-2xl border border-border bg-surface/50 p-8 sm:p-10">
+          <figure className="signal-border card-sheen relative mx-auto max-w-3xl rounded-2xl border border-border bg-surface/50 p-8 sm:p-10">
             <Quote className="absolute right-8 top-8 h-10 w-10 text-accent/15" aria-hidden="true" />
             <blockquote className="font-display text-balance text-xl font-medium leading-relaxed text-fg sm:text-2xl">
               “{featured.quote}”

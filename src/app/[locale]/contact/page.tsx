@@ -48,7 +48,7 @@ export default async function ContactPage({ params }: Params) {
             {tiers.map((t) => (
               <div
                 key={t.title}
-                className={`card-sheen flex flex-col gap-3 rounded-2xl border p-6 ${
+                className={`signal-border card-sheen flex flex-col gap-3 rounded-2xl border p-6 ${
                   t.highlight ? "border-accent/40 bg-surface/60" : "border-border bg-surface/40"
                 }`}
               >

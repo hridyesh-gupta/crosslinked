@@ -12,7 +12,7 @@ export function ProcessTimeline({ dict }: { dict: Dictionary }) {
         <div className="relative grid gap-8 md:grid-cols-4 md:gap-6">
           <div
             aria-hidden
-            className="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-border via-border-strong to-border md:block"
+            className="clx-flowline absolute left-0 right-0 top-6 hidden h-px md:block"
           />
           {dict.process.steps.map((step, i) => (
             <Reveal key={step.number} delay={i * 0.08} className="relative flex flex-col gap-3">

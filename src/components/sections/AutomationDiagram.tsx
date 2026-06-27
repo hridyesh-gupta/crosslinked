@@ -15,7 +15,7 @@ export function AutomationDiagram({ data, className }: { data: DiagramData; clas
   return (
     <div
       className={cn(
-        "card-sheen relative rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur-sm",
+        "signal-border card-sheen relative rounded-2xl border border-border bg-surface/70 p-6 backdrop-blur-sm",
         className,
       )}
     >
@@ -46,7 +46,12 @@ export function AutomationDiagram({ data, className }: { data: DiagramData; clas
                   <p className="truncate text-xs text-faint">{n.meta}</p>
                 </div>
               </div>
-              <span className="my-1 ml-[21px] block h-5 w-px bg-gradient-to-b from-accent/60 to-border" />
+              <span className="relative my-1 ml-[21px] block h-5 w-px overflow-hidden bg-border">
+                <span
+                  className="clx-travel absolute inset-x-0 top-0 h-2.5 bg-gradient-to-b from-transparent via-accent to-transparent"
+                  style={{ animationDelay: `${i * 0.4}s` }}
+                />
+              </span>
             </li>
           );
         })}

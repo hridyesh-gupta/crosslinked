@@ -142,8 +142,196 @@ body {
   background-image: linear-gradient(180deg, rgba(var(--sheen)), transparent 40%);
 }
 
+/* ── Signature motion: a lime "signal" that continuously flows along links ── */
+@keyframes clx-flow {
+  to {
+    stroke-dashoffset: -124;
+  }
+}
+@keyframes clx-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes clx-travel {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(260%);
+    opacity: 0;
+  }
+}
+@keyframes clx-breathe {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.12);
+  }
+}
+
+/* A short dash chasing along an SVG line/path = a travelling pulse. */
+.clx-edge {
+  stroke-dasharray: 3 121;
+  animation: clx-flow 3s linear infinite;
+}
+.clx-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: clx-twinkle 4s ease-in-out infinite;
+}
+.clx-travel {
+  animation: clx-travel 2.4s ease-in-out infinite;
+}
+.clx-breathe {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: clx-breathe 2.8s ease-in-out infinite;
+}
+
+/* A single lime light that orbits an element's border — the "signal" tracing
+   the link. Built from a masked conic gradient whose angle animates. */
+@property --clx-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes clx-orbit {
+  to {
+    --clx-angle: 360deg;
+  }
+}
+@keyframes clx-sweep {
+  0% {
+    transform: translateX(-160%) skewX(-12deg);
+  }
+  55%,
+  100% {
+    transform: translateX(160%) skewX(-12deg);
+  }
+}
+@keyframes clx-slide {
+  0% {
+    background-position: 130% 0;
+  }
+  100% {
+    background-position: -130% 0;
+  }
+}
+
+.signal-border {
+  position: relative;
+}
+.signal-border::after,
+.signal-border-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--clx-angle),
+    transparent 0deg,
+    transparent 285deg,
+    var(--accent) 340deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.signal-border::after {
+  opacity: 0.5;
+  animation: clx-orbit 7s linear infinite;
+}
+/* De-sync neighbouring cards so the beams never march in lockstep. */
+.signal-border:nth-child(2n)::after {
+  animation-duration: 9s;
+  animation-direction: reverse;
+}
+.signal-border:nth-child(3n)::after {
+  animation-duration: 6s;
+}
+.signal-border-hover::after {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.signal-border-hover:hover::after {
+  opacity: 0.7;
+  animation: clx-orbit 4s linear infinite;
+}
+
+/* A soft gleam that periodically sweeps across a button. */
+.signal-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.signal-sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: translateX(-160%) skewX(-12deg);
+  animation: clx-sweep 5s ease-in-out infinite 1.2s;
+  pointer-events: none;
+}
+
+/* A lime highlight that slides along a divider line. */
+.clx-flowline {
+  background-image: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    var(--border-strong) 45%,
+    var(--accent) 50%,
+    var(--border-strong) 55%,
+    var(--border) 100%
+  );
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  animation: clx-slide 6s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .clx-edge,
+  .clx-node,
+  .clx-travel,
+  .clx-breathe,
+  .clx-flowline,
+  .animate-ping,
+  .signal-border::after,
+  .signal-border-hover::after,
+  .signal-sheen::after {
+    animation: none !important;
+  }
+  .signal-border::after,
+  .signal-sheen::after {
+    opacity: 0 !important;
   }
 }

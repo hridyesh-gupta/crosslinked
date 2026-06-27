@@ -8,7 +8,7 @@ export function SecurityBand({ dict }: { dict: Dictionary }) {
   return (
     <section className="py-10">
       <Container>
-        <Reveal className="card-sheen flex flex-col items-start gap-6 rounded-2xl border border-border bg-surface/40 p-7 sm:flex-row sm:items-center sm:gap-8">
+        <Reveal className="signal-border card-sheen flex flex-col items-start gap-6 rounded-2xl border border-border bg-surface/40 p-7 sm:flex-row sm:items-center sm:gap-8">
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-border-strong bg-canvas text-accent">
             <ShieldCheck className="h-6 w-6" strokeWidth={1.6} aria-hidden="true" />
           </span>

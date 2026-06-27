@@ -18,7 +18,7 @@ export function ClientWall({ dict }: { dict: Dictionary }) {
                 href={c.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="card-sheen group flex h-full items-center gap-3 rounded-2xl border border-border bg-surface/40 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:bg-surface"
+                className="signal-border-hover card-sheen group flex h-full items-center gap-3 rounded-2xl border border-border bg-surface/40 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:bg-surface"
               >
                 <span className="font-display grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-border-strong bg-canvas text-sm font-semibold text-accent">
                   {c.monogram}

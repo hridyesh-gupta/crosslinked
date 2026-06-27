@@ -14,7 +14,7 @@ export function TestimonialsGrid({ dict }: { dict: Dictionary }) {
           {testimonials.map((t) => (
             <figure
               key={t.id}
-              className="card-sheen break-inside-avoid rounded-2xl border border-border bg-surface/40 p-6"
+              className="signal-border-hover card-sheen break-inside-avoid rounded-2xl border border-border bg-surface/40 p-6"
             >
               <blockquote className="text-sm leading-relaxed text-fg/90">“{t.quote}”</blockquote>
               <figcaption className="mt-5 flex items-center gap-3">
